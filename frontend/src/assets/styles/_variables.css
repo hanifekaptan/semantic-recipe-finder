@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --color-primary: #2f855a;
+    --color-accent: #f6ad55;
+    --color-secondary: #4ecdc4;
+
+    --bg: #ffffff;
+    --color-background: #dde0e2;
+    --color-surface: #fbf8f2;
+
+    --text: #222;
+    --color-text: #1a202c;
+    --color-text-primary: #2d2c2b;
+    --color-text-secondary: #7d936f;
+
+    --radius-md: 12px;
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 16px;
+    --border-radius-full: 9999px;
+
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+
+    --font-sans: 'Poppins', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    --font-family-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --font-family-heading: 'Times New Roman', Times, serif;
+
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-md: 1.125rem;
+    --font-size-lg: 1.5rem;
+    --font-size-xl: 2.25rem;
+    --font-size-xxl: 3rem;
+
+    --shadow-sm: 0 1px 2px hsla(0, 0%, 0%, 0.05);
+    --shadow-md: 0 4px 6px -1px hsla(0, 0%, 0%, 0.1), 0 2px 4px -2px hsla(0, 0%, 0%, 0.1);
+
+    --container-width: 900px;
+    --page-padding: 48px;
+    --content-max-height: 900px;
+    --header-height: 350px;
+    --search-hero-height: 600px;
+
+    --transition-fast: 200ms ease-in-out;
+    --transition-base: 300ms ease-in-out;
+    --z-index-header: 10;
+    --z-index-modal-overlay: 50;
+    --z-index-modal-content: 60;
+}

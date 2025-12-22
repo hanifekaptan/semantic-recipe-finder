@@ -1,0 +1,136 @@
+@import './_variables.css';
+
+html,
+body,
+#root {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Inter, Roboto, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn.primary {
+    background: var(--color-primary);
+    color: white;
+}
+
+.btn.secondary {
+    background: var(--color-secondary);
+    color: white;
+}
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 24px;
+    overflow: auto;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    max-width: 750px;
+    width: auto;
+    max-height: calc(100vh - 48px);
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 24px;
+}
+
+.page-root {
+    padding: 40px 0;
+}
+
+.centered-container {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 0 24px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+@media (max-width: 600px) {
+    .centered-container {
+        padding: 0 12px;
+    }
+}
+
+.centered-container h1 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    .modal-content {
+        padding: 10px;
+    }
+
+    .modal-content {
+        max-width: 100%;
+        margin: 0 8px;
+    }
+
+    .modal-content .ingredients-list,
+    .modal-content .instructions-list {
+        margin: 0;
+        padding-left: 16px !important;
+    }
+
+    .modal-content .ingredient-item,
+    .modal-content .instruction-item {
+        margin-bottom: 6px;
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    .modal-content .instruction-checkbox {
+        margin: 4px 6px 0 0;
+        width: 16px;
+        height: 16px;
+        flex: 0 0 16px;
+    }
+
+    .modal-content .nutrition-row {
+        gap: 8px;
+    }
+
+    .modal-content .nutrient-pie {
+        width: 88px;
+        margin-left: 4px;
+    }
+}
+
+@media (max-width: 420px) {
+    .modal-content .nutrition-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        align-items: start;
+    }
+
+    .modal-content .nutrient-pie {
+        width: 100%;
+        max-width: 120px;
+        margin: 0 auto;
+        justify-self: center;
+    }
+}
