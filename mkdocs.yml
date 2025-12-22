@@ -1,0 +1,30 @@
+site_name: "Semantic Recipe Finder"
+site_description: "Documentation for the Semantic Recipe Finder frontend and backend"
+site_url: ""
+repo_name: "semantic-recipe-finder"
+nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - API: api.md
+  - Architecture: architecture.md
+  - Testing: testing.md
+  - Examples:
+    - CURL: examples/curl-examples.md
+  - Backend README: ../backend/README.md
+  - Frontend README: ../frontend/README.md
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - toc.integrate
+docs_dir: docs
+use_directory_urls: true
+plugins:
+  - search
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+  - pymdownx.betterem

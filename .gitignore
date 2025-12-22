@@ -1,0 +1,34 @@
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Poetry
+.poetry/
+
+# Node / Frontend
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
+
+# IDE & OS specific
+.vscode/
+.idea/
+.DS_Store
+
+# Original data files
+backend/data/original/
