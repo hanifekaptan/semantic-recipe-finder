@@ -1,5 +1,4 @@
 # Semantic Recipe Finder
-# Semantic Recipe Finder
 
 Description
 -----------
