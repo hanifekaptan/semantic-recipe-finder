@@ -22,3 +22,5 @@ df = None
 temp_results = None 
 temp_search_query = None
 temp_search_pairs = None
+
+ready = False

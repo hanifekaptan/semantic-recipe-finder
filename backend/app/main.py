@@ -9,7 +9,6 @@ access throughout the application.
 
 from fastapi import FastAPI
 from app.api.routes import router
-from contextlib import asynccontextmanager
 import asyncio
 
 from app.services.data_loader import load_startup_resources
@@ -17,52 +16,63 @@ from app.core import config
 from app.core.middleware import setup_cors
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """ASGI lifespan handler.
+def _init_resources_sync():
+    embs, ids, model, df, err = load_startup_resources(
+        config.metadata_embeddings_path,
+        config.recipe_ids_path,
+        config.model_name,
+        config.recipes_details_path,
+    )
+    if err:
+        print(f"startup load warning: {err}")
+    return embs, ids, model, df
 
-    Loads required startup resources in a background executor to avoid
-    blocking the event loop. Any resources that fail to load are set to
-    `None` and a warning is printed; application continues to run so
-    health checks and tests can run in degraded mode.
+
+async def _background_init():
+    """Run heavy startup loads in a background executor so the app
+    can start immediately and respond to health checks.
     """
-
     loop = asyncio.get_running_loop()
-
-    def _init_resources_sync():
-        embs, ids, model, df, err = load_startup_resources(
-            config.metadata_embeddings_path,
-            config.recipe_ids_path,
-            config.model_name,
-            config.recipes_details_path,
-        )
-        if err:
-            print(f"startup load warning: {err}")
-        return embs, ids, model, df
-
     try:
         embs, ids, model, df = await loop.run_in_executor(None, _init_resources_sync)
+        config.embeddings = embs
+        config.ids = ids
+        config.model = model
+        config.df = df
+        config.ready = True
+        print("background resource initialization completed: ready=True")
     except Exception as e:
-        print(f"Error during startup resource initialization: {e}")
-        embs = ids = model = df = None
-
-    config.embeddings = embs
-    config.ids = ids
-    config.model = model
-    config.df = df
-    yield
+        config.embeddings = None
+        config.ids = None
+        config.model = None
+        config.df = None
+        config.ready = False
+        print(f"Error during background resource initialization: {e}")
 
 
 app = FastAPI(
     title="Semantic Recipe Finder API",
     description="Search recipes using semantic similarity and get recipe details",
     version="1.0.0",
-    lifespan=lifespan,
 )
 
 @app.get("/")
 def root():
-    return {"service": "Semantic Recipe Finder API", "status": "ok"}
+    return {"service": "Semantic Recipe Finder API", "status": "ok", "ready": getattr(config, "ready", False)}
 
 setup_cors(app)
 app.include_router(router)
+
+
+@app.on_event("startup")
+async def startup_event():
+    # schedule background initialization but don't await it so startup is fast
+    asyncio.create_task(_background_init())
+
+
+@app.get("/ready")
+def ready():
+    """Simple readiness endpoint used by health checks. Returns 200
+    immediately; `ready: true` once heavy resources have finished loading.
+    """
+    return {"ready": bool(getattr(config, "ready", False))}
