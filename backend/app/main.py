@@ -13,6 +13,7 @@ import asyncio
 
 from app.services.data_loader import load_startup_resources
 from app.core import config
+from contextlib import asynccontextmanager
 from app.core.middleware import setup_cors
 
 
@@ -50,10 +51,18 @@ async def _background_init():
         print(f"Error during background resource initialization: {e}")
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # schedule background initialization but don't await it so startup is fast
+    asyncio.create_task(_background_init())
+    yield
+
+
 app = FastAPI(
     title="Semantic Recipe Finder API",
     description="Search recipes using semantic similarity and get recipe details",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 @app.get("/")
@@ -62,12 +71,6 @@ def root():
 
 setup_cors(app)
 app.include_router(router)
-
-
-@app.on_event("startup")
-async def startup_event():
-    # schedule background initialization but don't await it so startup is fast
-    asyncio.create_task(_background_init())
 
 
 @app.get("/ready")

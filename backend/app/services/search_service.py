@@ -10,8 +10,7 @@ from typing import Any, Tuple
 
 from app.utils.vectorizer import vectorize_text
 from app.utils.data_preprocessor import clean_text
-from app.utils.ranking import topk_from_pairs
-from app.utils.similarity_score_calculator import calculate_cosine_similarity
+from app.utils.similarity_score_calculator import topk_chunked_similarity
 
 
 class SearchService:
@@ -44,16 +43,9 @@ class SearchService:
 	def vectorize(self, text: str) -> np.ndarray:
 		return vectorize_text(text, self.model, normalize=True)
 
-	def score(self, query_vec: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-		ids, sims = calculate_cosine_similarity(self.ids, query_vec, self.embeddings)
-		return ids, sims
-
-	def topk(self, ids: np.ndarray, sims: np.ndarray, k: int = 300) -> Tuple[np.ndarray, np.ndarray]:
-		return topk_from_pairs(ids, sims, k)
-
-	def search(self, text: str, k: int = 300) -> Tuple[np.ndarray, np.ndarray]:
+	def search(self, text: str, k: int = 300, chunk_size: int = 2000) -> Tuple[np.ndarray, np.ndarray]:
 		processed = self.preprocess(text)
 		vector = self.vectorize(processed)
-		ids, sims = self.score(vector)
-		return self.topk(ids, sims, k)
+		top_ids, top_sims = topk_chunked_similarity(self.ids, vector, self.embeddings, k=k, chunk_size=chunk_size)
+		return top_ids, top_sims
 

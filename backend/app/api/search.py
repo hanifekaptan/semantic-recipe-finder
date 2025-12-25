@@ -30,7 +30,14 @@ def search(
     model = getattr(config, "model", None)
 
     if embs is None or ids is None or model is None:
-        raise HTTPException(status_code=500, detail="Search resources not initialized")
+        # Resources not yet initialized (background init still running).
+        # Return 503 Service Unavailable so clients can retry later. Include
+        # a Retry-After header to suggest a wait time.
+        raise HTTPException(
+            status_code=503,
+            detail="Search resources not initialized; warming up",
+            headers={"Retry-After": "30"},
+        )
 
     search_svc: Optional[SearchService] = getattr(config, "search_service", None)
     if search_svc is None:

@@ -61,8 +61,43 @@ def load_npy_memmap(emb_path: str, ids_path: str) -> Tuple[np.ndarray, np.ndarra
     if not os.path.exists(ids_path):
         raise FileNotFoundError(f"ids file not found: {ids_path}")
 
-    embs = np.load(emb_path, mmap_mode="r")
-    ids = np.load(ids_path, mmap_mode="r")
+    try:
+        embs = np.load(emb_path, mmap_mode="r")
+    except ValueError as e:
+        # Common cause: file contains pickled objects. If the file is trusted
+        # try a safe fallback: load with allow_pickle=True and convert to a
+        # numeric float32 (this keeps startup workable for user-created files).
+        msg = str(e).lower()
+        if "pickled data" in msg or "object" in msg:
+            try:
+                arr = np.load(emb_path, allow_pickle=True)
+            except Exception as e2:
+                raise ValueError(
+                    "embeddings .npy appears to contain pickled/object data and could not be loaded with allow_pickle=True"
+                ) from e2
+
+            # If we got an object-dtype array (e.g., list-of-vecs), attempt
+            # to stack/convert items into a (N, D) float32 array.
+            if isinstance(arr, np.ndarray) and arr.dtype == object:
+                try:
+                    embs = np.vstack([np.asarray(x, dtype=np.float32) for x in arr])
+                except Exception as e3:
+                    raise ValueError(
+                        "embeddings appear to be pickled objects that could not be converted to a numeric float32 array"
+                    ) from e3
+            else:
+                # Otherwise try to coerce to a float32 numeric array.
+                try:
+                    embs = np.array(arr, dtype=np.float32)
+                except Exception as e4:
+                    raise ValueError("embeddings could not be converted to float32") from e4
+        else:
+            raise
+
+    try:
+        ids = np.load(ids_path, mmap_mode="r")
+    except ValueError as e:
+        raise ValueError(f"ids .npy could not be read: {e}") from e
 
     if not isinstance(ids, np.ndarray):
         raise TypeError("ids must be a numpy.ndarray")
@@ -83,13 +118,30 @@ def load_npy_memmap(emb_path: str, ids_path: str) -> Tuple[np.ndarray, np.ndarra
         except Exception:
             raise ValueError("ids could not be converted to int64")
 
+    # If embeddings are not float32, try to convert; for memmap files this
+    # requires creating an in-memory float32 copy. This restores previous
+    # behavior where datasets saved as float64 are accepted (note: large
+    # datasets may allocate significant memory during conversion).
     if embs.dtype != np.float32:
         try:
-            embs = embs.astype(np.float32)
+            if isinstance(embs, np.memmap):
+                embs = np.array(embs, dtype=np.float32)
+            else:
+                embs = embs.astype(np.float32, copy=False)
         except Exception:
             raise ValueError("embeddings could not be converted to float32")
 
-    if not np.isfinite(embs).all():
+    # Check finiteness in chunks to avoid allocating a full boolean array which
+    # can easily exceed available memory for large memmapped arrays.
+    def _check_finite(arr: np.ndarray, chunk_size: int = 1000) -> bool:
+        n = arr.shape[0]
+        for i in range(0, n, chunk_size):
+            j = min(n, i + chunk_size)
+            if not np.isfinite(arr[i:j]).all():
+                return False
+        return True
+
+    if not _check_finite(embs):
         raise ValueError("embeddings contain NaN or Inf values")
 
     return embs, ids

@@ -34,6 +34,11 @@ export async function searchRecipes(
         body: JSON.stringify(payload),
     }, timeoutMs);
 
+    if (res.status === 503) {
+        const retry = res.headers.get('Retry-After') || '30';
+        throw new Error(`Search service warming up; try again in ${retry}s`);
+    }
+
     if (!res.ok) {
         const text = await res.text();
         throw new Error(`Search API error: ${res.status} ${text}`);
@@ -84,6 +89,10 @@ export async function getRecipeById(id: number, { timeoutMs = 8000 }: { timeoutM
     if (detailCache.has(id)) return detailCache.get(id) ?? null;
 
     const res = await fetchWithTimeout(`${BASE_URL}/recipe/${id}`, undefined, timeoutMs);
+    if (res.status === 503) {
+        const retry = res.headers.get('Retry-After') || '30';
+        throw new Error(`Search service warming up; try again in ${retry}s`);
+    }
     if (!res.ok) {
         if (res.status === 404) return null;
         const text = await res.text();
