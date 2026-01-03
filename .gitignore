@@ -71,7 +71,6 @@ reports/
 data/raw/
 data/processed/
 backend/data/raw/
-*.npy
 
 # Allow LFS-tracked persisted embeddings/persist directory
 !data/processed/
