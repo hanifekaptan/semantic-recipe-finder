@@ -1,0 +1,83 @@
+# Python
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+tests/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.notebook_checkpoints/
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+docs/
+site/
+.mkdocs/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+notebooks/
+
+# Docker
+docker-compose*.yml
+.dockerignore
+
+# Logs
+*.log
+logs/
+
+# Data (exclude large files but keep processed embeddings)
+data/raw/*.csv
+data/original/
+*.parquet
+*.arrow
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+*.bak
+todo
+
+# Config files not needed in container
+.yml
+*.md
+!README.md
+
+# Keep these important files
+!data/processed/persist/
+!data/processed/*.npy
+!requirements.txt

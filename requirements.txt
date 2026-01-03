@@ -1,0 +1,15 @@
+fastapi==0.127.1
+uvicorn==0.40.0
+pandas==2.3.3
+numpy==1.26.4
+pyarrow==22.0.0
+chromadb[duckdb]==1.4.0
+duckdb==0.7.1
+sentence-transformers==5.2.0
+torch==2.9.1
+streamlit==1.52.2
+requests==2.32.5
+plotly==6.5.0
+pytest==9.0.2
+mkdocs==1.6.1
+mkdocs-material==9.7.1

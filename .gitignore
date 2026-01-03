@@ -1,0 +1,93 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.mypy_cache/
+.pytest_cache/
+.venv/
+venv/
+env/
+ENV/
+pip-wheel-metadata/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Poetry
+poetry.lock
+.venv
+
+# Virtual environment created by tools
+/.venv/
+
+# Package distribution
+*.whl
+*.egg
+
+# Tests / Coverage
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+# *.ipynb
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# Environment files / secrets
+.env
+.env.*
+*.pem
+secrets/
+
+# Streamlit
+.streamlit/
+
+# Notebook / output
+outputs/
+reports/
+
+# Data files (do not commit large/raw datasets)
+data/raw/
+data/processed/
+backend/data/raw/
+*.npy
+
+# Allow LFS-tracked persisted embeddings/persist directory
+!data/processed/
+!data/processed/persist/
+!data/processed/persist/**
+!data/persist/
+!data/persist/**
+
+# Docker
+docker-compose.override.yml
+Dockerfile
+
+# Misc
+*.bak
+*.tmp
+~$*
+
+# IDE workspace storage
+.vscode/*
