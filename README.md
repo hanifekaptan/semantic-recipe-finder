@@ -4,8 +4,8 @@
 
 ## 🌐 Links
 
-- **Live Demo**: [HuggingFace Spaces](https://huggingface.co/spaces/hanifekaptan/semantic-recipe-finder) _(coming soon)_
-- **Documentation**: [GitHub Pages](https://hanifekaptan.github.io/semantic-recipe-finder/) _(coming soon)_
+- **Live Demo**: [HuggingFace Spaces](https://huggingface.co/spaces/hanifekaptan/semantic-recipe-finder)
+- **Documentation**: [GitHub Pages](https://hanifekaptan.github.io/semantic-recipe-finder/)
 - **Repository**: [GitHub](https://github.com/hanifekaptan/semantic-recipe-finder)
 
 ## ✨ Features
